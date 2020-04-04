@@ -1,0 +1,44 @@
+// python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. functions.proto
+syntax = "proto3";
+
+message Model {
+    string model = 1;
+}
+
+message Empty {
+    int32 value = 1;
+}
+
+message Predictions {
+    int32 value = 1;
+}
+
+message InitializeParams {
+    double alpha = 1;
+    double index  = 2;
+    double isDC = 3;
+    int32 dc_index = 4;
+    int32 device_index = 5;
+    int32 coordinate_per_dc = 6;
+    int32 datapoints_per_device = 7;
+    int32 randomseed = 8;
+    double lambduh = 9;
+}
+
+message TrainParams {
+    int32 local_epochs = 1;
+    int32 global_epoch_idx = 2;
+    int32 decreasing_step_size = 3;
+}
+
+message UpdateParams {
+    string params = 1;
+}
+
+service FederatedNode{
+    rpc InitializeData(InitializeParams) returns (Empty) {}
+    rpc Train(TrainParams) returns (Model) {}
+    rpc UpdateState(UpdateParams) returns (Empty) {}
+    rpc SendModel(Model) returns (Empty) {}
+    rpc SendPredictions(Empty) returns (Predictions) {}
+}
