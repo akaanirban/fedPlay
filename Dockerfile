@@ -1,6 +1,7 @@
-FROM anirbandas/fedplay-base-python3
+FROM anirbandas/fedplay-base-python3:0.1
+USER app
 WORKDIR /home/app
 COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY node .
-CMD ["python","-u","node/server.py"]
+RUN pip install --user  --no-cache-dir -r requirements.txt
+COPY . .
+CMD ["python","-u","node/client.py"]
