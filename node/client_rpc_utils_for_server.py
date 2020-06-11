@@ -10,6 +10,9 @@ from proto import functions_pb2 as functions_pb2
 import base64
 import functools
 import logging
+from io import BytesIO
+import numpy as np
+
 logging.basicConfig(level=logging.INFO)
 
 
@@ -50,9 +53,13 @@ def initializeDataClient(i, stub_list):
 
 @args_wrapper
 def initializeClient(i, stub_list):
-    print("------------------",i, stub_list)
-    initialString = functions_pb2.InitialParams(index=float(i), dc_index=int(i), device_index=int(i))
-    print(f"Sending {initialString} to client {i}")
+    print("------------------", i, stub_list)
+    l = np.random.randint(0, 256, size=(60000, 784))
+    buff = BytesIO()
+    np.save(buff, l, allow_pickle=False)
+    initialString = functions_pb2.InitialParams(index=float(i), dc_index=int(i), device_index=int(i),
+                                                stuff=buff.getvalue())
+    # print(f"Sending {initialString} to client {i}")
     res = stub_list.get(i).InitializeParams(initialString)
     print(f"Node {i} initialized as client {i}, result: {res}")
 

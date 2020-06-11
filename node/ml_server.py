@@ -10,7 +10,7 @@ import grpc
 import concurrent.futures
 import collections
 from node_utils import *
-from client_rpc_utils import initializeClient, encode_file
+from client_rpc_utils_for_server import initializeClient, encode_file
 from generic_server import Node
 from proto import functions_pb2 as functions_pb2, functions_pb2_grpc as functions_pb2_grpc
 import logging
@@ -51,7 +51,9 @@ class MLServer(Node):
         for client in self.client_config:
             client_port = self.client_config.get(client)
             # Channel and the port for the client
-            client_channel = grpc.insecure_channel(f'localhost:{client_port}')
+            # Modify the default buffer size : https://github.com/tensorflow/serving/issues/1382#issuecomment-503375968
+            channel_opt = [('grpc.max_send_message_length', 512 * 1024 * 1024), ('grpc.max_receive_message_length', 512 * 1024 * 1024)]
+            client_channel = grpc.insecure_channel(f'localhost:{client_port}', options=channel_opt)
             # Client Stub
             client_stub = functions_pb2_grpc.FederatedAppStub(client_channel)
             self.client_connections[int(client)] = client_stub#[client_channel, client_stub]

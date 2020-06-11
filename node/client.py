@@ -10,6 +10,8 @@ import grpc
 from concurrent import futures
 import time
 import logging
+import numpy as np
+from io import BytesIO
 from proto import functions_pb2 as functions_pb2, functions_pb2_grpc as functions_pb2_grpc
 import client_functions as functions
 
@@ -31,10 +33,13 @@ class Client(functions_pb2_grpc.FederatedAppServicer):
 
     def InitializeParams(self, request, context):
         response = functions_pb2.Empty()
-        print(f"Node: {request.index} received an initial string of type {type(request)} and value: {request}")
+        #print(f"Node: {request.index} received an initial string of type {type(request)} and value: {request}")
         self.alpha = request.alpha
         self.device_index = request.device_index
         self.dc_index = request.dc_index
+        self.array = BytesIO(request.stuff)
+        s = np.load(self.array, allow_pickle=False)
+        print(f"Shape of the received array is the following: {s.shape}")
         logging.info(msg=f"Client {self.device_index} is initialized")
         return response
 
@@ -60,7 +65,10 @@ class Client(functions_pb2_grpc.FederatedAppServicer):
 
 
 if __name__ == "__main__":
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10), options=[
+          ('grpc.max_send_message_length', 512 * 1024 * 1024),
+          ('grpc.max_receive_message_length', 512 * 1024 * 1024)
+      ])
 
     functions_pb2_grpc.add_FederatedAppServicer_to_server(Client(), server)
 

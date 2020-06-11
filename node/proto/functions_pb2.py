@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x0f\x66unctions.proto\x1a\x1cgoogle/protobuf/struct.proto\"\x16\n\x05Model\x12\r\n\x05model\x18\x01 \x01(\t\"\x16\n\x05\x45mpty\x12\r\n\x05value\x18\x01 \x01(\x05\"\"\n\x04Pair\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"t\n\x06\x63onfig\x12#\n\x06params\x18\x01 \x03(\x0b\x32\x13.config.ParamsEntry\x1a\x45\n\x0bParamsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.google.protobuf.Value:\x02\x38\x01\"\"\n\nDictionary\x12\x14\n\x05pairs\x18\x01 \x03(\x0b\x32\x05.Pair\"\xc2\x01\n\rInitialParams\x12\r\n\x05\x61lpha\x18\x01 \x01(\x01\x12\r\n\x05index\x18\x02 \x01(\x01\x12\x0c\n\x04isDC\x18\x03 \x01(\x01\x12\x10\n\x08\x64\x63_index\x18\x04 \x01(\x05\x12\x14\n\x0c\x64\x65vice_index\x18\x05 \x01(\x05\x12\x19\n\x11\x63oordinate_per_dc\x18\x06 \x01(\x05\x12\x1d\n\x15\x64\x61tapoints_per_device\x18\x07 \x01(\x05\x12\x12\n\nrandomseed\x18\x08 \x01(\x05\x12\x0f\n\x07lambduh\x18\t \x01(\x01\"%\n\x04Note\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07message\x18\x02 \x01(\t2\x98\x01\n\x0c\x46\x65\x64\x65ratedApp\x12,\n\x10InitializeParams\x12\x0e.InitialParams\x1a\x06.Empty\"\x00\x12 \n\x0cGenerateData\x12\x06.Empty\x1a\x06.Empty\"\x00\x12\x19\n\x05Train\x12\x06.Empty\x1a\x06.Model\"\x00\x12\x1d\n\tSendModel\x12\x06.Model\x1a\x06.Empty\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x0f\x66unctions.proto\x1a\x1cgoogle/protobuf/struct.proto\"\x16\n\x05Model\x12\r\n\x05model\x18\x01 \x01(\t\"\x16\n\x05\x45mpty\x12\r\n\x05value\x18\x01 \x01(\x05\"\"\n\x04Pair\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"t\n\x06\x63onfig\x12#\n\x06params\x18\x01 \x03(\x0b\x32\x13.config.ParamsEntry\x1a\x45\n\x0bParamsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.google.protobuf.Value:\x02\x38\x01\"\"\n\nDictionary\x12\x14\n\x05pairs\x18\x01 \x03(\x0b\x32\x05.Pair\"\xd1\x01\n\rInitialParams\x12\r\n\x05\x61lpha\x18\x01 \x01(\x01\x12\r\n\x05index\x18\x02 \x01(\x01\x12\x0c\n\x04isDC\x18\x03 \x01(\x01\x12\x10\n\x08\x64\x63_index\x18\x04 \x01(\x05\x12\x14\n\x0c\x64\x65vice_index\x18\x05 \x01(\x05\x12\x19\n\x11\x63oordinate_per_dc\x18\x06 \x01(\x05\x12\x1d\n\x15\x64\x61tapoints_per_device\x18\x07 \x01(\x05\x12\x12\n\nrandomseed\x18\x08 \x01(\x05\x12\x0f\n\x07lambduh\x18\t \x01(\x01\x12\r\n\x05stuff\x18\n \x01(\x0c\"%\n\x04Note\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07message\x18\x02 \x01(\t2\x98\x01\n\x0c\x46\x65\x64\x65ratedApp\x12,\n\x10InitializeParams\x12\x0e.InitialParams\x1a\x06.Empty\"\x00\x12 \n\x0cGenerateData\x12\x06.Empty\x1a\x06.Empty\"\x00\x12\x19\n\x05Train\x12\x06.Empty\x1a\x06.Model\"\x00\x12\x1d\n\tSendModel\x12\x06.Model\x1a\x06.Empty\"\x00\x62\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,])
 
@@ -295,6 +295,13 @@ _INITIALPARAMS = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='stuff', full_name='InitialParams.stuff', index=9,
+      number=10, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -308,7 +315,7 @@ _INITIALPARAMS = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=288,
-  serialized_end=482,
+  serialized_end=497,
 )
 
 
@@ -345,8 +352,8 @@ _NOTE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=484,
-  serialized_end=521,
+  serialized_start=499,
+  serialized_end=536,
 )
 
 _CONFIG_PARAMSENTRY.fields_by_name['value'].message_type = google_dot_protobuf_dot_struct__pb2._VALUE
@@ -428,8 +435,8 @@ _FEDERATEDAPP = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=524,
-  serialized_end=676,
+  serialized_start=539,
+  serialized_end=691,
   methods=[
   _descriptor.MethodDescriptor(
     name='InitializeParams',

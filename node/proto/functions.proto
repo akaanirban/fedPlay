@@ -1,4 +1,5 @@
 // python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. functions.proto
+// https://github.com/xainag/numproto
 syntax = "proto3";
 import "google/protobuf/struct.proto";
 
@@ -33,6 +34,7 @@ message InitialParams {
     int32 datapoints_per_device = 7;
     int32 randomseed = 8;
     double lambduh = 9;
+    bytes stuff = 10;
 }
 
 message Note {
