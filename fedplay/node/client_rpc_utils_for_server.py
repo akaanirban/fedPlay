@@ -6,13 +6,10 @@ Created on Jun 6/10/20 12:25 PM 2020
 @author: Anirban Das
 """
 
-from proto import functions_pb2 as functions_pb2
-import base64
+from fedplay.node.proto import functions_pb2 as functions_pb2
 import functools
 import logging
-from node_utils import serialize, deserialize
-import yaml
-import numpy as np
+from fedplay.serde import serialize, deserialize
 
 logging.basicConfig(level=logging.INFO)
 
@@ -30,19 +27,6 @@ def args_wrapper(func):
         return value
 
     return wrapper_decorator
-
-
-@args_wrapper
-def encode_file(file_path):
-    with open(file_path, 'rb') as file:
-        encoded_string = base64.b64encode(file.read())
-    return encoded_string
-
-
-@args_wrapper
-def encode_model(model):
-    encoded_string = base64.b64encode(model)
-    return encoded_string
 
 
 @args_wrapper
@@ -80,7 +64,7 @@ def trainFunc(client_id, stub, q, lambduh, xtheta, model=None):
     trainconfig.q = q
     trainconfig.lambduh = lambduh
     trainconfig.model.xtheta = serialize(xtheta)
-    #trainconfig.model.model = serialize(model)
+    # trainconfig.model.model = serialize(model)
 
     # if xtheta:
     #     trainconfig.model.xtheta = serialize(xtheta)
@@ -92,6 +76,7 @@ def trainFunc(client_id, stub, q, lambduh, xtheta, model=None):
     model = deserialize(res.model)
     logging.info(f"Server received model from Client {client_id} ==> {model.shape}")
     return client_id, model
+
 
 @args_wrapper
 def getClientModel(client_id, stub_list):

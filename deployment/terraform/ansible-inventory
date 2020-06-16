@@ -1,0 +1,4 @@
+[fedplay-workers]
+34.202.158.141 ansible_ssh_user=ubuntu
+3.89.146.110 ansible_ssh_user=ubuntu
+100.25.199.207 ansible_ssh_user=ubuntu

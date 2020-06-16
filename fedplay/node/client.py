@@ -11,11 +11,10 @@ from concurrent import futures
 import time
 import logging
 import numpy as np
-from io import BytesIO
-from node_utils import serialize, deserialize
-from proto import functions_pb2 as functions_pb2, functions_pb2_grpc as functions_pb2_grpc
-import client_functions as functions
+from fedplay.serde import serialize, deserialize
+from fedplay.node.proto import functions_pb2, functions_pb2_grpc
 import uuid
+
 logging.basicConfig(level=logging.INFO)
 _ONE_HR_IN_SECONDS = 3600
 
@@ -50,14 +49,14 @@ class Client(functions_pb2_grpc.FederatedAppServicer):
 
     def GenerateData(self, request, context):
         response = functions_pb2.Empty()
-        response.value = functions.GenerateData()
         return response
 
     def InitializeData(self, request, context):
         self.X = deserialize(request.x)
         self.y = deserialize(request.y)
         logging.info(msg=f"Client {self.device_index} initialized X {self.X.shape} and Y {self.y.shape}")
-        response = functions_pb2.Reply(str_reply=self.identifier, numeric_reply=self.X.shape[0]) # Returns the number of samples
+        response = functions_pb2.Reply(str_reply=self.identifier,
+                                       numeric_reply=self.X.shape[0])  # Returns the number of samples
         # logging.debug(self.identifier, "\n", self.X[0:5,0:5])
         return response
 
@@ -66,12 +65,13 @@ class Client(functions_pb2_grpc.FederatedAppServicer):
         self.Xtheta = deserialize(request.model.xtheta)
         Q = int(request.q)
         lambduh = float(request.lambduh)
-        logging.info(msg=f"Client {self.device_index} the dimension of Xtheta {self.Xtheta.shape}, Theta {self.theta.shape}")
+        logging.info(
+            msg=f"Client {self.device_index} the dimension of Xtheta {self.Xtheta.shape}, Theta {self.theta.shape}")
         # Isolate the H_-k from other datacenters for the same label space
         # Obtained in the last iteration
         Xtheta_from_other_DC = self.Xtheta - self.X @ self.theta  # Assuming label space is same
         for rounds in range(Q):
-            print("Starting round ", rounds)
+            logging.info("Starting local round ", rounds)
             # batch gradient descent for the time being
 
             # If NO partital gradient information from outside is used
@@ -110,21 +110,21 @@ class Client(functions_pb2_grpc.FederatedAppServicer):
     def __str__(self) -> str:
         return f"<Federated Client id:{self.device_index}>"
 
+    def start(self, port):
+        """Start the client"""
+        server = grpc.server(futures.ThreadPoolExecutor(max_workers=10), options=[
+            ('grpc.max_send_message_length', 512 * 1024 * 1024),
+            ('grpc.max_receive_message_length', 512 * 1024 * 1024)
+        ])
 
-if __name__ == "__main__":
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10), options=[
-        ('grpc.max_send_message_length', 512 * 1024 * 1024),
-        ('grpc.max_receive_message_length', 512 * 1024 * 1024)
-    ])
+        functions_pb2_grpc.add_FederatedAppServicer_to_server(Client(), server)
 
-    functions_pb2_grpc.add_FederatedAppServicer_to_server(Client(), server)
+        logging.info(f"Starting client {self.identifier} on PORT: {port}")
+        server.add_insecure_port(f'[::]:{port}')
+        server.start()
 
-    print("Starting server on PORT: 8080")
-    server.add_insecure_port('[::]:8080')
-    server.start()
-
-    try:
-        while True:
-            time.sleep(_ONE_HR_IN_SECONDS)
-    except KeyboardInterrupt:
-        server.stop(0)
+        try:
+            while True:
+                time.sleep(_ONE_HR_IN_SECONDS)
+        except KeyboardInterrupt:
+            server.stop(0)

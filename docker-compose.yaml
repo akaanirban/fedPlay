@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
       context: .
     ports:
-      - "8081:8080"
+      - "5081:8080"
     volumes:
       - /data/node01:/app/data
 
@@ -14,7 +14,7 @@ services:
       dockerfile: Dockerfile
       context: .
     ports:
-      - "8082:8080"
+      - "5082:8080"
     volumes:
       - /data/node02:/app/data
 
@@ -23,7 +23,7 @@ services:
       dockerfile: Dockerfile
       context: .
     ports:
-      - "8083:8080"
+      - "5083:8080"
     volumes:
       - /data/node03:/app/data
 
@@ -32,7 +32,7 @@ services:
       dockerfile: Dockerfile
       context: .
     ports:
-      - "8084:8080"
+      - "5084:8080"
     volumes:
       - /data/node04:/app/data
 
@@ -41,6 +41,6 @@ services:
       dockerfile: Dockerfile
       context: .
     ports:
-      - "8085:8080"
+      - "5085:8080"
     volumes:
       - /data/node05:/app/data

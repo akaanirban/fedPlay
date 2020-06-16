@@ -10,4 +10,3 @@ import sys
 from os.path import dirname, abspath
 proto = dirname(abspath(__file__))
 sys.path.insert(0, proto)
-print(sys.path)

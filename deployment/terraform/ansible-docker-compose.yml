@@ -1,0 +1,70 @@
+- name: Install Ansible Prereqs
+  hosts: fedplay-workers
+  gather_facts: no
+  tasks:
+    - raw: "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y python-minimal python-pip"
+
+- name: Install Docker Prereqs
+  hosts: fedplay-workers
+  gather_facts: yes
+  tasks:
+    - package:
+        name: "{{item}}"
+        state: latest
+      with_items:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+    - apt_key:
+        url: "https://download.docker.com/linux/ubuntu/gpg"
+        state: present
+    - apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+        state: present
+
+- name: Install Docker
+  hosts: fedplay-workers
+  gather_facts: yes
+  tasks:
+    - package:
+        name: "docker-ce"
+        state: latest
+    - user:
+        name: "{{ ansible_ssh_user }}"
+        groups: docker
+        append: yes
+
+#- name: Install docker-compose
+#  hosts: fedplay-workers
+#  gather_facts: yes
+#  remote_user: ubuntu
+#  tasks:
+#    - get_url:
+#        url: https://github.com/docker/compose/releases/download/1.25.1-rc1/docker-compose-Linux-x86_64
+#        dest: /usr/local/bin/docker-compose
+#        mode: 'u+x,g+x'
+
+- name: Install docker-compose
+  hosts: fedplay-workers
+  gather_facts: yes
+  tasks:
+    - apt:
+        name: docker-compose
+        state: present
+        update_cache: yes
+
+- name: SCP this current project folder into all other remote hosts
+  hosts: fedplay-workers
+  gather_facts: yes
+  tasks:
+    - synchronize: # use synchronize instead of copy as it is faster https://stackoverflow.com/a/27995384/8853476
+        src: /home/anirban/Softwares/GitHub/fedPlay
+        dest: /home/ubuntu/
+
+- name: run the service defined in docker-compose.yml
+  hosts: fedplay-workers
+  gather_facts: yes
+  tasks:
+    - docker_compose:
+        project_src: /home/ubuntu/fedPlay

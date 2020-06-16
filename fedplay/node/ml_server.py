@@ -10,53 +10,18 @@ from random import random
 import grpc
 import concurrent.futures
 import collections
-from node_utils import *
-from client_rpc_utils_for_server import initializeClient, encode_file, initializeDataClient, trainFunc, sendModel
-from generic_server import Node
-from proto import functions_pb2 as functions_pb2, functions_pb2_grpc as functions_pb2_grpc
+import fedplay as play
+from fedplay.serde import serialize, deserialize
+from fedplay.node.client_rpc_utils_for_server import initializeClient, initializeDataClient, trainFunc, sendModel
+from fedplay.node.generic_server import Node
+from fedplay.node.proto import functions_pb2, functions_pb2_grpc
 import logging
 import sys
 import copy
 from datetime import datetime
-import pandas as pd
-from sklearn.utils import shuffle
-from sklearn.preprocessing import StandardScaler
 import numpy as np
 
 logging.basicConfig(level=logging.WARNING)
-
-df = pd.read_csv("/home/anirban/Softwares/GitHub/fed_hierarchy/data/superconductivity/train.csv")
-df = shuffle(df, random_state=42)
-X = df.iloc[:16000, 0: -1]  # 16000 will be 75% of the data
-y = df.iloc[:16000, -1]
-mm_scaler = StandardScaler()
-X_train_minmax = mm_scaler.fit_transform(X)
-X_train_minmax = np.array(X_train_minmax)
-X_train_minmax = np.insert(X_train_minmax, 0, 1, axis=1)
-binary_y = np.array(y).reshape(-1, 1)
-X_test = df.iloc[16000:, :-1]
-X_test = mm_scaler.transform(X_test)
-# X_test = np.array(X_test)
-X_test = np.insert(X_test, 0, 1, axis=1)
-y_test = df.iloc[16000:, -1]
-
-del X
-del y
-del df
-
-N = 1
-K = 5
-global_epoch = 10
-local_epoch = 10
-coordinate_per_dc = int(X_train_minmax.shape[1] / N)
-extradatapointsinfirstdevice = X_train_minmax.shape[1] - coordinate_per_dc * N
-# largst_SV = np.max(np.linalg.eig(X_train_minmax[:, 1:].T @ X_train_minmax[:, 1:])[0])
-datapoints_per_device = int(X_train_minmax.shape[0] / (K))
-# alpha = 0.00000001 # for the case when X is not notmalized
-alpha = 0.01  # 0.031 # = 16000/505347
-lambduh = 0.01
-decreasing_step = False
-decreasing_step = False
 
 
 class MLServer(Node):
@@ -69,6 +34,10 @@ class MLServer(Node):
         logging.info(f"Booting Server/Hub {config.get('index')}")
         self.config = config
         self.client_config = config.get('client_config')
+        self.X_train = config.get('X_train')
+        self.y_train = config.get('y_train')
+        self.datapoints_per_device = config.get('datapoints_per_device')
+        self.coordinates_per_dc = config.get('coordinates_per_dc')
         self.initialize()
         self.client_connections = collections.OrderedDict()
         self.sampled_clients = collections.OrderedDict()
@@ -80,8 +49,8 @@ class MLServer(Node):
         self.alpha: float = self.config.get('alpha')
         self.lambduh: float = 0.01  # self.config.get('lambduh')
         self.local_epoch: int = 5
-        self.global_Xtheta: np.array = np.zeros((X_train_minmax.shape[0], 1))  # self.config.get('Xtheta')
-        self.global_model: np.array = np.zeros((X_train_minmax.shape[1], 1))  # self.config.get('theta')
+        self.global_Xtheta: np.array = np.zeros((self.X_train.shape[0], 1))  # self.config.get('Xtheta')
+        self.global_model: np.array = np.zeros((self.X_train.shape[1], 1))  # self.config.get('theta')
         # self.costs = []
         # self.X = self.config.get('X')
         # self.y = self.config.get('y')
@@ -97,17 +66,17 @@ class MLServer(Node):
     def initializeNetwork(self):
         logging.info(f"Server/Hub {self.config.get('index')} trying to find clients.")
         for idx, client in enumerate(self.client_config):
-            client_port = self.client_config.get(client)
+            client_address = self.client_config.get(client)
             # Channel and the port for the client
             # Modify the default buffer size : https://github.com/tensorflow/serving/issues/1382#issuecomment-503375968
             channel_opt = [('grpc.max_send_message_length', 512 * 1024 * 1024),
                            ('grpc.max_receive_message_length', 512 * 1024 * 1024)]
-            client_channel = grpc.insecure_channel(f'localhost:{client_port}', options=channel_opt)
+            client_channel = grpc.insecure_channel(f'{client_address}', options=channel_opt)
             # Client Stub
             client_stub = functions_pb2_grpc.FederatedAppStub(client_channel)
             self.client_connections[int(client)] = client_stub  # [client_channel, client_stub]
             # threading.Thread(target=listen_for_messages, args=(channel05, stub05,), daemon=True).start()
-            self.client_list.append({"port": client_port,
+            self.client_list.append({"address": client_address,
                                      "channel": client_stub,
                                      "model": None,
                                      "client_id": "",
@@ -116,7 +85,8 @@ class MLServer(Node):
         executor = concurrent.futures.ThreadPoolExecutor(len(self.client_list))
         fut = {executor.submit(initializeClient, [client.get("client_sequence"),
                                                   client.get("channel"),
-                                                  np.zeros((coordinate_per_dc, 1))]): client.get("client_sequence") for
+                                                  np.zeros((self.coordinates_per_dc, 1))]): client.get(
+            "client_sequence") for
                idx, client in enumerate(self.client_list)}
         results, _ = concurrent.futures.wait(fut)
         for r in results:
@@ -136,17 +106,19 @@ class MLServer(Node):
         executor = concurrent.futures.ThreadPoolExecutor(len(self.client_list))
         futures = {executor.submit(initializeDataClient,
                                    [client.get("client_id"), client.get("channel"),
-                                    X_train_minmax[client.get("client_sequence") * datapoints_per_device: (client.get(
-                                        "client_sequence") + 1) * datapoints_per_device, :],
-                                    binary_y[client.get("client_sequence") * datapoints_per_device: (client.get(
-                                        "client_sequence") + 1) * datapoints_per_device, :]]
+                                    self.X_train[
+                                    client.get("client_sequence") * self.datapoints_per_device: (client.get(
+                                        "client_sequence") + 1) * self.datapoints_per_device, :],
+                                    self.y_train[
+                                    client.get("client_sequence") * self.datapoints_per_device: (client.get(
+                                        "client_sequence") + 1) * self.datapoints_per_device, :]]
                                    ): client.get("client_id") for client in self.client_list}
         results, _ = concurrent.futures.wait(futures)
         logging.info(
             f"Server/Hub {self.config.get('index')} finished data setup of clients: {[res.result() for res in results]}.")
 
-    def trainingLoss(self):
-        self.loss.append(self.linear_cost(self.global_model, X_train_minmax, binary_y, self.lambduh))
+    def calculateTrainingLoss(self):
+        self.loss.append(self.linear_cost(self.global_model, self.X_train, self.y_train, self.lambduh))
 
     @staticmethod
     def linear_cost(theta, x, y, lambduh=0):
@@ -165,8 +137,10 @@ class MLServer(Node):
             futures = {executor.submit(trainFunc,
                                        [client.get("client_id"), client.get("channel"),
                                         self.local_epoch, self.lambduh,
-                                        self.global_Xtheta[client.get("client_sequence") * datapoints_per_device:
-                                                    (client.get("client_sequence") + 1) * datapoints_per_device, :], "",
+                                        self.global_Xtheta[client.get("client_sequence") * self.datapoints_per_device:
+                                                           (client.get(
+                                                               "client_sequence") + 1) * self.datapoints_per_device, :],
+                                        "",
                                         ]): client.get("client_id") for client in self.client_list}
             results, b = concurrent.futures.wait(futures)
             clientModels = collections.OrderedDict()
@@ -187,7 +161,7 @@ class MLServer(Node):
             self.federated_averaging()
             self.sendModel(firstInitFlag=False)
             # self.sendXtheta()
-            self.trainingLoss()
+            self.calculateTrainingLoss()
         logging.info(f"***********\n**********\n Training Loss: {self.loss}")
 
     def sendModel(self, firstInitFlag):
@@ -197,16 +171,15 @@ class MLServer(Node):
                                                firstInitFlag, self.global_model]): client.get("client_id")
                    for client in self.client_list}
         results, _ = concurrent.futures.wait(futures)
-        self.global_Xtheta = np.zeros((X_train_minmax.shape[0], 1))
+        self.global_Xtheta = np.zeros((self.X_train.shape[0], 1))
         # TODO: Fix this such that the stacking is based on client id
         for idx, temp in enumerate(results):
-            print("Inside send model", temp)
             client_id, client_xtheta = temp.result()
             for clidx, client in enumerate(self.client_list):
                 if client.get("client_id") == client_id:
                     sequence = self.client_list[clidx]["client_sequence"]
-            self.global_Xtheta[sequence * datapoints_per_device:(sequence + 1) * datapoints_per_device,
-            :] = copy.deepcopy(client_xtheta)
+            self.global_Xtheta[sequence * self.datapoints_per_device:(sequence + 1) * self.datapoints_per_device, :] \
+                = copy.deepcopy(client_xtheta)
         logging.info(
             f"Server/Hub {self.config.get('index')} finished sending data to clients: {self.client_connections.keys()} and {self.global_Xtheta[0:10]}.")
 
@@ -220,8 +193,8 @@ class MLServer(Node):
 
     def federated_averaging(self):
         num_clients = len(self.client_list)
-        #print(self.client_list[0]["model"])
-        theta_sum = np.zeros((X_train_minmax.shape[1], 1))
+        # print(self.client_list[0]["model"])
+        theta_sum = np.zeros((self.X_train.shape[1], 1))
         for client in self.client_list:
             theta_sum += client.get("model")
         self.global_model = copy.deepcopy(theta_sum) / num_clients
@@ -261,31 +234,3 @@ class MLServer(Node):
         # federatedAveraging(result)
         logging.info(
             f"Server/Hub {self.config.get('index')} finished sending data to clients: {self.client_connections.keys()}.")
-
-
-if __name__ == "__main__":
-    server = MLServer(
-        {"index": 1, "T": 100, "lambduh": 0.01,
-         "client_config": {"1": 8081, "2": 8082, "3": 8083, "4": 8084, "5": 8085}})
-    while True:
-        print("1. Initialize Network ")
-        print("2. Initialize Data on all clients")
-        print("3. Start Training on clients")
-        print("4. Save Model and global Loss")
-        print("5. Test on the global model")
-        print("6. Exit")
-        print("Enter an option: ")
-        option = input()
-
-        if option == "1":
-            server.initializeNetwork()
-        if option == "2":
-            server.initializeData()
-        if option == "3":
-            server.train(clients_per_round=-1)
-        if option == "4":
-            server.saveModelLoss()
-        if option == "5":
-            sendModel(int(option))
-        if option == "6":
-            sys.exit(0)

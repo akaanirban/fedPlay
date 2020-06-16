@@ -1,0 +1,8 @@
+- name: Destroy the service defined in docker-compose.yml
+  hosts: fedplay-workers
+  gather_facts: yes
+  tasks:
+    - docker_compose:
+        state: absent
+        stopped: yes
+        project_src: /home/ubuntu/fedPlay
