@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x0f\x66unctions.proto\x1a\x1cgoogle/protobuf/struct.proto\"\x16\n\x05Model\x12\r\n\x05model\x18\x01 \x01(\t\"\x16\n\x05\x45mpty\x12\r\n\x05value\x18\x01 \x01(\x05\"\"\n\x04Pair\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"t\n\x06\x63onfig\x12#\n\x06params\x18\x01 \x03(\x0b\x32\x13.config.ParamsEntry\x1a\x45\n\x0bParamsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.google.protobuf.Value:\x02\x38\x01\"\"\n\nDictionary\x12\x14\n\x05pairs\x18\x01 \x03(\x0b\x32\x05.Pair\"\xd1\x01\n\rInitialParams\x12\r\n\x05\x61lpha\x18\x01 \x01(\x01\x12\r\n\x05index\x18\x02 \x01(\x01\x12\x0c\n\x04isDC\x18\x03 \x01(\x01\x12\x10\n\x08\x64\x63_index\x18\x04 \x01(\x05\x12\x14\n\x0c\x64\x65vice_index\x18\x05 \x01(\x05\x12\x19\n\x11\x63oordinate_per_dc\x18\x06 \x01(\x05\x12\x1d\n\x15\x64\x61tapoints_per_device\x18\x07 \x01(\x05\x12\x12\n\nrandomseed\x18\x08 \x01(\x05\x12\x0f\n\x07lambduh\x18\t \x01(\x01\x12\r\n\x05stuff\x18\n \x01(\x0c\"%\n\x04Note\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07message\x18\x02 \x01(\t2\x98\x01\n\x0c\x46\x65\x64\x65ratedApp\x12,\n\x10InitializeParams\x12\x0e.InitialParams\x1a\x06.Empty\"\x00\x12 \n\x0cGenerateData\x12\x06.Empty\x1a\x06.Empty\"\x00\x12\x19\n\x05Train\x12\x06.Empty\x1a\x06.Model\"\x00\x12\x1d\n\tSendModel\x12\x06.Model\x1a\x06.Empty\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x0f\x66unctions.proto\x1a\x1cgoogle/protobuf/struct.proto\"2\n\x05Model\x12\r\n\x05model\x18\x01 \x01(\x0c\x12\x0e\n\x06xtheta\x18\x02 \x01(\x0c\x12\n\n\x02id\x18\x03 \x01(\t\"\x16\n\x05\x45mpty\x12\r\n\x05value\x18\x01 \x01(\x05\"1\n\x05Reply\x12\x11\n\tstr_reply\x18\x01 \x01(\t\x12\x15\n\rnumeric_reply\x18\x02 \x01(\x01\"\"\n\x04Pair\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"t\n\x06\x63onfig\x12#\n\x06params\x18\x01 \x03(\x0b\x32\x13.config.ParamsEntry\x1a\x45\n\x0bParamsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.google.protobuf.Value:\x02\x38\x01\"\"\n\nDictionary\x12\x14\n\x05pairs\x18\x01 \x03(\x0b\x32\x05.Pair\"\xea\x01\n\rInitialParams\x12\r\n\x05\x61lpha\x18\x01 \x01(\x01\x12\r\n\x05index\x18\x02 \x01(\x01\x12\x0c\n\x04isDC\x18\x03 \x01(\x01\x12\x10\n\x08\x64\x63_index\x18\x04 \x01(\x05\x12\x14\n\x0c\x64\x65vice_index\x18\x05 \x01(\x05\x12\x19\n\x11\x63oordinate_per_dc\x18\x06 \x01(\x05\x12\x1d\n\x15\x64\x61tapoints_per_device\x18\x07 \x01(\x05\x12\x12\n\nrandomseed\x18\x08 \x01(\x05\x12\x0f\n\x07lambduh\x18\t \x01(\x01\x12\x17\n\x0f\x64\x65\x63reasing_step\x18\n \x01(\x08\x12\r\n\x05model\x18\x0b \x01(\x0c\"%\n\x04Note\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0f\n\x07message\x18\x02 \x01(\t\"\x18\n\x06Result\x12\x0e\n\x06result\x18\x01 \x01(\x0c\"@\n\x0bTrainConfig\x12\x15\n\x05model\x18\x01 \x01(\x0b\x32\x06.Model\x12\t\n\x01q\x18\x02 \x01(\x05\x12\x0f\n\x07lambduh\x18\x03 \x01(\x01\"\x1c\n\x04\x44\x61ta\x12\t\n\x01x\x18\x01 \x01(\x0c\x12\t\n\x01y\x18\x02 \x01(\x0c\x32\x81\x02\n\x0c\x46\x65\x64\x65ratedApp\x12,\n\x10InitializeParams\x12\x0e.InitialParams\x1a\x06.Reply\"\x00\x12 \n\x0cGenerateData\x12\x06.Empty\x1a\x06.Empty\"\x00\x12!\n\x0eInitializeData\x12\x05.Data\x1a\x06.Reply\"\x00\x12\x1f\n\x05Train\x12\x0c.TrainConfig\x1a\x06.Model\"\x00\x12\x17\n\x04Test\x12\x06.Empty\x1a\x05.Note\"\x00\x12\x1d\n\tSendModel\x12\x06.Empty\x1a\x06.Model\"\x00\x12%\n\x11UpdateLocalModels\x12\x06.Model\x1a\x06.Model\"\x00\x62\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,])
 
@@ -35,7 +35,21 @@ _MODEL = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='model', full_name='Model.model', index=0,
-      number=1, type=9, cpp_type=9, label=1,
+      number=1, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='xtheta', full_name='Model.xtheta', index=1,
+      number=2, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='id', full_name='Model.id', index=2,
+      number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -53,7 +67,7 @@ _MODEL = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=49,
-  serialized_end=71,
+  serialized_end=99,
 )
 
 
@@ -83,8 +97,46 @@ _EMPTY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=73,
-  serialized_end=95,
+  serialized_start=101,
+  serialized_end=123,
+)
+
+
+_REPLY = _descriptor.Descriptor(
+  name='Reply',
+  full_name='Reply',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='str_reply', full_name='Reply.str_reply', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='numeric_reply', full_name='Reply.numeric_reply', index=1,
+      number=2, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=125,
+  serialized_end=174,
 )
 
 
@@ -121,8 +173,8 @@ _PAIR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=97,
-  serialized_end=131,
+  serialized_start=176,
+  serialized_end=210,
 )
 
 
@@ -159,8 +211,8 @@ _CONFIG_PARAMSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=180,
-  serialized_end=249,
+  serialized_start=259,
+  serialized_end=328,
 )
 
 _CONFIG = _descriptor.Descriptor(
@@ -189,8 +241,8 @@ _CONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=133,
-  serialized_end=249,
+  serialized_start=212,
+  serialized_end=328,
 )
 
 
@@ -220,8 +272,8 @@ _DICTIONARY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=251,
-  serialized_end=285,
+  serialized_start=330,
+  serialized_end=364,
 )
 
 
@@ -296,8 +348,15 @@ _INITIALPARAMS = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='stuff', full_name='InitialParams.stuff', index=9,
-      number=10, type=12, cpp_type=9, label=1,
+      name='decreasing_step', full_name='InitialParams.decreasing_step', index=9,
+      number=10, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='model', full_name='InitialParams.model', index=10,
+      number=11, type=12, cpp_type=9, label=1,
       has_default_value=False, default_value=b"",
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -314,8 +373,8 @@ _INITIALPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=288,
-  serialized_end=497,
+  serialized_start=367,
+  serialized_end=601,
 )
 
 
@@ -352,21 +411,140 @@ _NOTE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=499,
-  serialized_end=536,
+  serialized_start=603,
+  serialized_end=640,
+)
+
+
+_RESULT = _descriptor.Descriptor(
+  name='Result',
+  full_name='Result',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='result', full_name='Result.result', index=0,
+      number=1, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=642,
+  serialized_end=666,
+)
+
+
+_TRAINCONFIG = _descriptor.Descriptor(
+  name='TrainConfig',
+  full_name='TrainConfig',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='model', full_name='TrainConfig.model', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='q', full_name='TrainConfig.q', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='lambduh', full_name='TrainConfig.lambduh', index=2,
+      number=3, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=668,
+  serialized_end=732,
+)
+
+
+_DATA = _descriptor.Descriptor(
+  name='Data',
+  full_name='Data',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='x', full_name='Data.x', index=0,
+      number=1, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='y', full_name='Data.y', index=1,
+      number=2, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=734,
+  serialized_end=762,
 )
 
 _CONFIG_PARAMSENTRY.fields_by_name['value'].message_type = google_dot_protobuf_dot_struct__pb2._VALUE
 _CONFIG_PARAMSENTRY.containing_type = _CONFIG
 _CONFIG.fields_by_name['params'].message_type = _CONFIG_PARAMSENTRY
 _DICTIONARY.fields_by_name['pairs'].message_type = _PAIR
+_TRAINCONFIG.fields_by_name['model'].message_type = _MODEL
 DESCRIPTOR.message_types_by_name['Model'] = _MODEL
 DESCRIPTOR.message_types_by_name['Empty'] = _EMPTY
+DESCRIPTOR.message_types_by_name['Reply'] = _REPLY
 DESCRIPTOR.message_types_by_name['Pair'] = _PAIR
 DESCRIPTOR.message_types_by_name['config'] = _CONFIG
 DESCRIPTOR.message_types_by_name['Dictionary'] = _DICTIONARY
 DESCRIPTOR.message_types_by_name['InitialParams'] = _INITIALPARAMS
 DESCRIPTOR.message_types_by_name['Note'] = _NOTE
+DESCRIPTOR.message_types_by_name['Result'] = _RESULT
+DESCRIPTOR.message_types_by_name['TrainConfig'] = _TRAINCONFIG
+DESCRIPTOR.message_types_by_name['Data'] = _DATA
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 Model = _reflection.GeneratedProtocolMessageType('Model', (_message.Message,), {
@@ -382,6 +560,13 @@ Empty = _reflection.GeneratedProtocolMessageType('Empty', (_message.Message,), {
   # @@protoc_insertion_point(class_scope:Empty)
   })
 _sym_db.RegisterMessage(Empty)
+
+Reply = _reflection.GeneratedProtocolMessageType('Reply', (_message.Message,), {
+  'DESCRIPTOR' : _REPLY,
+  '__module__' : 'functions_pb2'
+  # @@protoc_insertion_point(class_scope:Reply)
+  })
+_sym_db.RegisterMessage(Reply)
 
 Pair = _reflection.GeneratedProtocolMessageType('Pair', (_message.Message,), {
   'DESCRIPTOR' : _PAIR,
@@ -426,6 +611,27 @@ Note = _reflection.GeneratedProtocolMessageType('Note', (_message.Message,), {
   })
 _sym_db.RegisterMessage(Note)
 
+Result = _reflection.GeneratedProtocolMessageType('Result', (_message.Message,), {
+  'DESCRIPTOR' : _RESULT,
+  '__module__' : 'functions_pb2'
+  # @@protoc_insertion_point(class_scope:Result)
+  })
+_sym_db.RegisterMessage(Result)
+
+TrainConfig = _reflection.GeneratedProtocolMessageType('TrainConfig', (_message.Message,), {
+  'DESCRIPTOR' : _TRAINCONFIG,
+  '__module__' : 'functions_pb2'
+  # @@protoc_insertion_point(class_scope:TrainConfig)
+  })
+_sym_db.RegisterMessage(TrainConfig)
+
+Data = _reflection.GeneratedProtocolMessageType('Data', (_message.Message,), {
+  'DESCRIPTOR' : _DATA,
+  '__module__' : 'functions_pb2'
+  # @@protoc_insertion_point(class_scope:Data)
+  })
+_sym_db.RegisterMessage(Data)
+
 
 _CONFIG_PARAMSENTRY._options = None
 
@@ -435,8 +641,8 @@ _FEDERATEDAPP = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=539,
-  serialized_end=691,
+  serialized_start=765,
+  serialized_end=1022,
   methods=[
   _descriptor.MethodDescriptor(
     name='InitializeParams',
@@ -444,7 +650,7 @@ _FEDERATEDAPP = _descriptor.ServiceDescriptor(
     index=0,
     containing_service=None,
     input_type=_INITIALPARAMS,
-    output_type=_EMPTY,
+    output_type=_REPLY,
     serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
@@ -457,21 +663,48 @@ _FEDERATEDAPP = _descriptor.ServiceDescriptor(
     serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
+    name='InitializeData',
+    full_name='FederatedApp.InitializeData',
+    index=2,
+    containing_service=None,
+    input_type=_DATA,
+    output_type=_REPLY,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
     name='Train',
     full_name='FederatedApp.Train',
-    index=2,
+    index=3,
+    containing_service=None,
+    input_type=_TRAINCONFIG,
+    output_type=_MODEL,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='Test',
+    full_name='FederatedApp.Test',
+    index=4,
+    containing_service=None,
+    input_type=_EMPTY,
+    output_type=_NOTE,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='SendModel',
+    full_name='FederatedApp.SendModel',
+    index=5,
     containing_service=None,
     input_type=_EMPTY,
     output_type=_MODEL,
     serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
-    name='SendModel',
-    full_name='FederatedApp.SendModel',
-    index=3,
+    name='UpdateLocalModels',
+    full_name='FederatedApp.UpdateLocalModels',
+    index=6,
     containing_service=None,
     input_type=_MODEL,
-    output_type=_EMPTY,
+    output_type=_MODEL,
     serialized_options=None,
   ),
 ])

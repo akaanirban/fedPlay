@@ -8,6 +8,7 @@ Created on Wed Jun 10 12:03:22 2020
 """
 
 import numpy as np
+from io import BytesIO
 import random
 import pickle
 import os
@@ -113,3 +114,5 @@ def save_reports(self, round, reports):
     # # Extract global weights
     # self.saved_reports['w{}'.format(round)] = self.flatten_weights(
     #     fl_model.extract_weights(self.model))
+
+

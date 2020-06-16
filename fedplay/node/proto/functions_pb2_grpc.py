@@ -16,22 +16,37 @@ class FederatedAppStub(object):
         self.InitializeParams = channel.unary_unary(
                 '/FederatedApp/InitializeParams',
                 request_serializer=functions__pb2.InitialParams.SerializeToString,
-                response_deserializer=functions__pb2.Empty.FromString,
+                response_deserializer=functions__pb2.Reply.FromString,
                 )
         self.GenerateData = channel.unary_unary(
                 '/FederatedApp/GenerateData',
                 request_serializer=functions__pb2.Empty.SerializeToString,
                 response_deserializer=functions__pb2.Empty.FromString,
                 )
+        self.InitializeData = channel.unary_unary(
+                '/FederatedApp/InitializeData',
+                request_serializer=functions__pb2.Data.SerializeToString,
+                response_deserializer=functions__pb2.Reply.FromString,
+                )
         self.Train = channel.unary_unary(
                 '/FederatedApp/Train',
-                request_serializer=functions__pb2.Empty.SerializeToString,
+                request_serializer=functions__pb2.TrainConfig.SerializeToString,
                 response_deserializer=functions__pb2.Model.FromString,
+                )
+        self.Test = channel.unary_unary(
+                '/FederatedApp/Test',
+                request_serializer=functions__pb2.Empty.SerializeToString,
+                response_deserializer=functions__pb2.Note.FromString,
                 )
         self.SendModel = channel.unary_unary(
                 '/FederatedApp/SendModel',
+                request_serializer=functions__pb2.Empty.SerializeToString,
+                response_deserializer=functions__pb2.Model.FromString,
+                )
+        self.UpdateLocalModels = channel.unary_unary(
+                '/FederatedApp/UpdateLocalModels',
                 request_serializer=functions__pb2.Model.SerializeToString,
-                response_deserializer=functions__pb2.Empty.FromString,
+                response_deserializer=functions__pb2.Model.FromString,
                 )
 
 
@@ -50,7 +65,19 @@ class FederatedAppServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def InitializeData(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def Train(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Test(self, request, context):
         """Missing associated documentation comment in .proto file"""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -62,28 +89,49 @@ class FederatedAppServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def UpdateLocalModels(self, request, context):
+        """Missing associated documentation comment in .proto file"""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_FederatedAppServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'InitializeParams': grpc.unary_unary_rpc_method_handler(
                     servicer.InitializeParams,
                     request_deserializer=functions__pb2.InitialParams.FromString,
-                    response_serializer=functions__pb2.Empty.SerializeToString,
+                    response_serializer=functions__pb2.Reply.SerializeToString,
             ),
             'GenerateData': grpc.unary_unary_rpc_method_handler(
                     servicer.GenerateData,
                     request_deserializer=functions__pb2.Empty.FromString,
                     response_serializer=functions__pb2.Empty.SerializeToString,
             ),
+            'InitializeData': grpc.unary_unary_rpc_method_handler(
+                    servicer.InitializeData,
+                    request_deserializer=functions__pb2.Data.FromString,
+                    response_serializer=functions__pb2.Reply.SerializeToString,
+            ),
             'Train': grpc.unary_unary_rpc_method_handler(
                     servicer.Train,
-                    request_deserializer=functions__pb2.Empty.FromString,
+                    request_deserializer=functions__pb2.TrainConfig.FromString,
                     response_serializer=functions__pb2.Model.SerializeToString,
+            ),
+            'Test': grpc.unary_unary_rpc_method_handler(
+                    servicer.Test,
+                    request_deserializer=functions__pb2.Empty.FromString,
+                    response_serializer=functions__pb2.Note.SerializeToString,
             ),
             'SendModel': grpc.unary_unary_rpc_method_handler(
                     servicer.SendModel,
+                    request_deserializer=functions__pb2.Empty.FromString,
+                    response_serializer=functions__pb2.Model.SerializeToString,
+            ),
+            'UpdateLocalModels': grpc.unary_unary_rpc_method_handler(
+                    servicer.UpdateLocalModels,
                     request_deserializer=functions__pb2.Model.FromString,
-                    response_serializer=functions__pb2.Empty.SerializeToString,
+                    response_serializer=functions__pb2.Model.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -107,7 +155,7 @@ class FederatedApp(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/FederatedApp/InitializeParams',
             functions__pb2.InitialParams.SerializeToString,
-            functions__pb2.Empty.FromString,
+            functions__pb2.Reply.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -128,6 +176,22 @@ class FederatedApp(object):
             call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
+    def InitializeData(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/FederatedApp/InitializeData',
+            functions__pb2.Data.SerializeToString,
+            functions__pb2.Reply.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
     def Train(request,
             target,
             options=(),
@@ -138,8 +202,24 @@ class FederatedApp(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/FederatedApp/Train',
-            functions__pb2.Empty.SerializeToString,
+            functions__pb2.TrainConfig.SerializeToString,
             functions__pb2.Model.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def Test(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/FederatedApp/Test',
+            functions__pb2.Empty.SerializeToString,
+            functions__pb2.Note.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -154,7 +234,23 @@ class FederatedApp(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/FederatedApp/SendModel',
+            functions__pb2.Empty.SerializeToString,
+            functions__pb2.Model.FromString,
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def UpdateLocalModels(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/FederatedApp/UpdateLocalModels',
             functions__pb2.Model.SerializeToString,
-            functions__pb2.Empty.FromString,
+            functions__pb2.Model.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -1,0 +1,4 @@
+# Training configurations
+
+trainconfig:
+  alpha: 0.01

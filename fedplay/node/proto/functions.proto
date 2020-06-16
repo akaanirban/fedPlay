@@ -4,11 +4,18 @@ syntax = "proto3";
 import "google/protobuf/struct.proto";
 
 message Model {
-    string model = 1;
+    bytes model = 1;
+    bytes xtheta = 2;
+    string id = 3;
 }
 
 message Empty {
     int32 value = 1;
+}
+
+message Reply {
+  string str_reply = 1;
+  double numeric_reply = 2;
 }
 
 message Pair {
@@ -34,7 +41,8 @@ message InitialParams {
     int32 datapoints_per_device = 7;
     int32 randomseed = 8;
     double lambduh = 9;
-    bytes stuff = 10;
+    bool decreasing_step = 10;
+    bytes model = 11;
 }
 
 message Note {
@@ -42,10 +50,28 @@ message Note {
     string message = 2;
 }
 
+message Result {
+    bytes result = 1;
+}
+
+message TrainConfig{
+    Model model = 1;
+    int32 q = 2;
+    double lambduh = 3;
+}
+
+message Data{
+    bytes x=1;
+    bytes y=2;
+}
+
 service FederatedApp{
-    rpc InitializeParams(InitialParams) returns (Empty) {}
+    rpc InitializeParams(InitialParams) returns (Reply) {}
     rpc GenerateData(Empty) returns (Empty) {}
-    rpc Train(Empty) returns (Model) {} 
-    rpc SendModel(Model) returns (Empty) {}
+    rpc InitializeData(Data) returns (Reply) {}
+    rpc Train(TrainConfig) returns (Model) {}
+    rpc Test(Empty) returns (Note) {}
+    rpc SendModel(Empty) returns (Model) {}
+    rpc UpdateLocalModels(Model) returns (Model) {}
     //rpc ChatStream (Empty) returns (stream Note)
 }
