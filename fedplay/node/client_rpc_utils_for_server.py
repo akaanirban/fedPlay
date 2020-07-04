@@ -79,12 +79,14 @@ def trainFunc(client_id, stub, q, lambduh, xtheta, model=None):
 
 
 @args_wrapper
-def getClientModel(client_id, stub_list):
+def getClientModels(client_id, stub):
     """
-    get the current model from a client
+    Query the current model from a client
     """
     empty = functions_pb2.Empty(value=1)
-    print(f"Getting model from client {client_id}")
-    res = stub_list[client_id].SendModelToServer(empty)
-    print(f"Node {client_id}: Obtained model from client {client_id}, result: {res}")
-    return res
+    logging.info(f"Getting model from client {client_id}")
+    res = stub.SendModel(empty)
+    model = deserialize(res.model)
+    print(f"Node {client_id}: Obtained model from client {client_id}")
+    assert res.id == client_id
+    return client_id, model

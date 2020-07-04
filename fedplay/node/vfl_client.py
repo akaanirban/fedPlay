@@ -20,7 +20,9 @@ _ONE_HR_IN_SECONDS = 3600
 
 
 class Client(functions_pb2_grpc.FederatedAppServicer):
-
+    """
+    This is actually a gRPC server. We call it a client based on federated learning terminilogies.
+    """
     def __init__(self, config=None) -> None:
         self.alpha: float = None  # alpha
         self.theta = None  # theta
@@ -92,6 +94,7 @@ class Client(functions_pb2_grpc.FederatedAppServicer):
     def SendModel(self, request, context):
         response = functions_pb2.Model()
         response.model = serialize(self.theta)
+        response.id = self.identifier
         return response
 
     def Test(self):

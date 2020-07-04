@@ -7,6 +7,7 @@ Created on Jun 6/15/20 9:24 PM 2020
 """
 import sys
 import os
+
 path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, path)
 import fedplay as play
@@ -15,8 +16,7 @@ import numpy as np
 from sklearn.utils import shuffle
 from sklearn.preprocessing import StandardScaler
 
-
-df = pd.read_csv("./superconductivity/train.csv")
+df = pd.read_csv(os.path.join(os.path.dirname(__file__),"superconductivity/train.csv"))
 df = shuffle(df, random_state=42)
 X = df.iloc[:16000, 0: -1]  # 16000 will be 75% of the data
 y = df.iloc[:16000, -1]
@@ -49,32 +49,33 @@ lambduh = 0.01
 decreasing_step = False
 decreasing_step = False
 
-
 if __name__ == "__main__":
     # server = MLServer(
     #     {"index": 1, "T": 100, "lambduh": 0.01,
     #      "client_config": {"1": 8081, "2": 8082, "3": 8083, "4": 8084, "5": 8085}})
-    server = play.MLServer({"index": 1,
-                            "T":20,
-                            "lambduh": 0.01,
-                            "X_train": X_train_minmax,
-                            "y_train": binary_y,
-                            "coordinates_per_dc": coordinates_per_dc,
-                            "datapoints_per_device": datapoints_per_device,
-                            "client_config": {"1": "localhost:5081", "2": "localhost:5082", "3": "localhost:5083", "4": "localhost:5084", "5": "localhost:5085"}
-                            # "client_config": {"1": 8080}
-                            })
+    server = play.HFLServer({"index": 1,
+                             "T": 20,
+                             "lambduh": 0.01,
+                             "X_train": X_train_minmax,
+                             "y_train": binary_y,
+                             "coordinates_per_dc": coordinates_per_dc,
+                             "datapoints_per_device": datapoints_per_device,
+                             "client_config": {"1": "localhost:5081", "2": "localhost:5082", "3": "localhost:5083",
+                                               "4": "localhost:5084", "5": "localhost:5085"}
+                             # "client_config": {"1": 8080}
+                             })
 
-    #server.initializeNetwork()
-    #print(f"Clients are {server.client_list}")
-    #server.initializeData()
+    # server.initializeNetwork()
+    # print(f"Clients are {server.client_list}")
+    # server.initializeData()
     while True:
         print("1. Initialize Network ")
         print("2. Initialize Data on all clients")
         print("3. Start Training on clients")
         print("4. Save Model and global Loss")
-        print("5. Test on the global model")
-        print("6. Exit")
+        print("5. Send global modelto all clients")
+        print("6: Query global model from all clients")
+        print("7. Exit")
         print("Enter an option: ")
         option = input()
 
@@ -87,10 +88,8 @@ if __name__ == "__main__":
         if option == "4":
             server.saveModelLoss()
         if option == "5":
-            sendModel(int(option))
+            server.sendModel()
         if option == "6":
+            server.queryModelFromClients()
+        if option == "7":
             sys.exit(0)
-
-
-
-
