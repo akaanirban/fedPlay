@@ -22,4 +22,4 @@ pandas==0.25.3
 pytz==2019.3
 scipy==1.4.1
 six==1.14.0
-joblib==0.14.1
+joblib==1.2.0
